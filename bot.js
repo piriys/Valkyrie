@@ -14,8 +14,9 @@ const discordClient = new CommandoClient({
 discordClient.registry
   .registerDefaultTypes()
   .registerGroups([
-    ['docs', 'Commands for to Fetching External Programming Documentation'],
-    ['leaderboard', 'Commands for Discord User Points']
+    ['docs', 'Commands for Fetching External Programming Documentation'],
+    ['leaderboard', 'Commands for Leaderboard'],
+    ['util', 'Utility Commands']
   ])
   .registerCommandsIn(path.join(__dirname, 'commands'));
 
@@ -26,9 +27,9 @@ discordClient.once('ready', () => {
   discordClient.user.setActivity('Visual Studio Code');
 });
 
-discordClient.on('message', message => {
-  console.log(`message: ${message.content} userid:${message.member.user.id}`);
-});
+// discordClient.on('message', message => {
+//   console.log(`message: ${message.content} userid:${message.member.user.id}`);
+// });
 
 discordClient.on('error', console.error);
 
