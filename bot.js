@@ -2,57 +2,34 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
-// Discord.js
-const Discord = require('discord.js');
-const discordClient = new Discord.Client();
-discordClient.login(process.env.VALKYRIE_TOKEN);
+// Discord.js-commando
+const { CommandoClient } = require('discord.js-commando');
+const path = require('path');
+const discordClient = new CommandoClient({
+  commandPrefix: '$v',
+  owner: process.env.OWNER_DISCORD_ID,
+  invite: 'https://discord.gg/DyQjte'
+});
 
-// MongoDB
-const Mongo = require('mongodb');
-const uri = process.env.MONGODB_URI;
-const mongoClient = new Mongo.MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+discordClient.registry
+  .registerDefaultTypes()
+  .registerGroups([
+    ['docs', 'Commands for to Fetching External Programming Documentation'],
+    ['leaderboard', 'Commands for Discord User Points']
+  ])
+  .registerCommandsIn(path.join(__dirname, 'commands'));
 
 discordClient.once('ready', () => {
-	console.log('Valkyrie Ready');
-	console.log(`botid:${discordClient.user.id}`);
+  console.log(
+    `Logged in as ${discordClient.user.tag} (${discordClient.user.id})`
+  );
+  discordClient.user.setActivity('Visual Studio Code');
 });
 
-discordClient.on('message', (message) => {
-	console.log(`message: ${message.content} userid:${message.member.user.id}`);
-	if(message.content.startsWith(`<@!${process.env.VALKYRIE_DISCORD_ID}>`)) {
-		const messageArray = message.content.split(' ');
-		const [botMention, botCommand, ...commandParameters] = messageArray;
-		const senderId = message.member.user.id;
-		message.channel.send(`<@!${senderId}>`);
-		console.log(`command: ${botCommand}`);
-		console.log(`parameters: ${commandParameters}`);
-		// mongoClient.connect((connectError) => {
-		// 	if(!connectError) {
-		// 		console.log('mongo connected');
-		// 		const collection = mongoClient.db('VALKYRIE').collection('DiscordUsers');
-		// 		collection.updateOne(
-		// 			{discordId: senderId},
-		// 			{ 	
-		// 				$set: {
-		// 					discordId: senderId,
-		// 					displayName: message.member.displayName 
-		// 				}
-		// 			},
-		// 			{upsert: true},
-		// 			(updateError) => {
-		// 				if(!updateError) {
-		// 					console.log('upsert successful');
-		// 				} else {
-		// 					console.log(updateError.errmsg);
-		// 					console.log('upsert failed')
-		// 				}
-		// 			}
-		// 		);
-		// 		mongoClient.close();
-		// 	} else {
-		// 		console.log('connection failed')
-		// 	}
-		// });			
-	}
+discordClient.on('message', message => {
+  console.log(`message: ${message.content} userid:${message.member.user.id}`);
 });
 
+discordClient.on('error', console.error);
+
+discordClient.login(process.env.VALKYRIE_TOKEN);
