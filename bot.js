@@ -6,7 +6,7 @@ dotenv.config();
 const { CommandoClient } = require('discord.js-commando');
 const path = require('path');
 const discordClient = new CommandoClient({
-  commandPrefix: '$v',
+  commandPrefix: '$',
   owner: process.env.OWNER_DISCORD_ID,
   invite: 'https://discord.gg/DyQjte'
 });
@@ -24,12 +24,11 @@ discordClient.once('ready', () => {
   console.log(
     `Logged in as ${discordClient.user.tag} (${discordClient.user.id})`
   );
-  discordClient.user.setActivity('Visual Studio Code');
+  discordClient.user.setPresence({
+    game: { name: 'Visual Studio Code' },
+    status: 'online'
+  });
 });
-
-// discordClient.on('message', message => {
-//   console.log(`message: ${message.content} userid:${message.member.user.id}`);
-// });
 
 discordClient.on('error', console.error);
 
