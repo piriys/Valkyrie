@@ -15,7 +15,7 @@ module.exports = class awardPointCommand extends Command {
       group: 'leaderboard',
       memberName: 'awardpoint',
       description: 'Add point to a user',
-      patterns: [/<@!?(\d+)>\s?(\+\+|\u{2B50}|\u{1F36A})/gu],
+      patterns: [/<@!?(\d+)>\s?(\u{1F36A})/gu],
       defaultHandling: false,
       throttling: {
         usages: 5,
@@ -53,52 +53,77 @@ module.exports = class awardPointCommand extends Command {
           .db('VALKYRIE')
           .collection('AwardLeaderboard');
 
-        const updateBulk = users.map(user => ({
-          updateOne: {
-            filter: { _id: user._id },
-            update: { $inc: { point: 1 } },
-            upsert: true
+        const updateBulk = [];
+        let hasUndefinedUser = false;
+        users.forEach(user => {
+          const clientUser = this.client.users.get(user._id);
+          console.log('client user:');
+          console.log(clientUser);
+          if (clientUser) {
+            //push only if user is valid
+            updateBulk.push({
+              updateOne: {
+                filter: { _id: user._id },
+                update: {
+                  $set: { displayName: clientUser.username },
+                  $inc: { point: 1 }
+                },
+                upsert: true
+              }
+            });
+          } else {
+            hasUndefinedUser = true;
           }
-        }));
+        });
 
-        collection.bulkWrite(
-          updateBulk,
-          { ordered: true },
-          (bulkWriteError, bulkWriteResult) => {
-            if (!bulkWriteError) {
-              console.log('bulk write successful:');
-              console.log(bulkWriteResult);
+        if (hasUndefinedUser) {
+          message.reply(
+            `I can't award points to user that's not in this server. Sorry!`
+          );
+        }
 
-              collection
-                .find({ _id: { $in: Array.from(userIds) } })
-                .toArray((findError, findResult) => {
-                  if (!findError) {
-                    console.log('find successful:');
-                    console.log(findResult);
+        if (updateBulk.length > 0) {
+          collection.bulkWrite(
+            updateBulk,
+            { ordered: true },
+            (bulkWriteError, bulkWriteResult) => {
+              if (!bulkWriteError) {
+                console.log('bulk write successful:');
+                console.log(bulkWriteResult);
 
-                    const reply = findResult.map(user => {
-                      const discordUser = this.client.users.get(user._id);
-                      return `${
-                        discordUser ? discordUser : '(Unknown User)'
-                      } now has ${user.point} point${
-                        Number(user.point) > 1 ? 's' : ''
-                      }!`;
-                    });
+                collection
+                  .find({ _id: { $in: Array.from(userIds) } })
+                  .toArray((findError, findResult) => {
+                    if (!findError) {
+                      console.log('find successful:');
+                      console.log(findResult);
 
-                    return message.say(reply.join('\n'));
-                  } else {
-                    console.log('find failed:');
-                    console.log(findError);
-                  }
-                  mongoClient.close();
-                });
-            } else {
-              console.log('bulk write error:');
-              console.log(bulkWriteError);
-              mongoClient.close();
+                      const reply = findResult.map(user => {
+                        const clientUser = this.client.users.get(user._id);
+                        return `${
+                          clientUser ? clientUser : '(Unknown User)'
+                        } now has ${user.point} point${
+                          Number(user.point) > 1 ? 's' : ''
+                        }!`;
+                      });
+
+                      return message.say(reply.join('\n'));
+                    } else {
+                      console.log('find failed:');
+                      console.log(findError);
+                    }
+                    mongoClient.close();
+                  });
+              } else {
+                console.log('bulk write error:');
+                console.log(bulkWriteError);
+                mongoClient.close();
+              }
             }
-          }
-        );
+          );
+        } else {
+          mongoClient.close();
+        }
       } else {
         console.log('connection failed:');
         console.log(connectError);

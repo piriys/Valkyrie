@@ -18,6 +18,8 @@ discordClient.registry
     ['leaderboard', 'Commands for Leaderboard'],
     ['util', 'Utility Commands']
   ])
+  // .registerDefaultGroups()
+  // .registerDefaultCommands()
   .registerCommandsIn(path.join(__dirname, 'commands'));
 
 discordClient.once('ready', () => {
