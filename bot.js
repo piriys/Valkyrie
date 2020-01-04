@@ -15,7 +15,8 @@ discordClient.registry
   .registerDefaultTypes()
   .registerGroups([
     ['docs', 'Commands for Fetching External Programming Documentation'],
-    ['leaderboard', 'Commands for Leaderboard'],
+    ['awards', 'Commands for awards Leaderboard'],
+    ['fun', 'Commands for fun and games'],
     ['util', 'Utility Commands']
   ])
   // .registerDefaultGroups()

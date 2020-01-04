@@ -8,13 +8,13 @@ const { Command } = require('discord.js-commando');
 // MongoDB
 const Mongo = require('mongodb');
 
-module.exports = class awardPointCommand extends Command {
+module.exports = class AwardPointCommand extends Command {
   constructor(discordClient) {
     super(discordClient, {
-      name: 'awardpoint',
-      group: 'leaderboard',
-      memberName: 'awardpoint',
-      description: 'Add point to a user',
+      name: 'addaward',
+      group: 'awards',
+      memberName: 'addaward',
+      description: 'Add an award point to a user',
       patterns: [/<@!?(\d+)>\s?(\u{1F36A})/gu],
       defaultHandling: false,
       throttling: {
@@ -106,29 +106,27 @@ module.exports = class awardPointCommand extends Command {
                           Number(user.point) > 1 ? 's' : ''
                         }!`;
                       });
-
+                      mongoClient.close();
                       return message.say(reply.join('\n'));
                     } else {
                       console.log('find failed:');
                       console.log(findError);
                     }
-                    mongoClient.close();
                   });
               } else {
                 console.log('bulk write error:');
                 console.log(bulkWriteError);
-                mongoClient.close();
               }
             }
           );
         } else {
-          mongoClient.close();
+          console.log('nothing to update');
         }
       } else {
         console.log('connection failed:');
         console.log(connectError);
-        mongoClient.close();
       }
     });
+    mongoClient.close();
   }
 };
