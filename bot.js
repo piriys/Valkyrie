@@ -34,4 +34,4 @@ discordClient.once('ready', () => {
 
 discordClient.on('error', console.error);
 
-discordClient.login(process.env.V_BOT_TOKEN);
+discordClient.login(process.env.V_TOKEN);
