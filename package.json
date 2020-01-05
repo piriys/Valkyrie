@@ -1,0 +1,32 @@
+{
+  "name": "valkyrie",
+  "version": "1.0.0",
+  "description": "A discord bot",
+  "main": "bot.js",
+  "dependencies": {
+    "discord.js": "^12.0.0-dev",
+    "dotenv": "^8.2.0",
+    "discord.js-commando": "^0.11.0-dev",
+    "mongodb": "^3.4.1",
+    "webpack": "^4.41.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/piriys/Valkyrie.git"
+  },
+  "keywords": [
+    "bot",
+    "discordjs",
+    "commando"
+  ],
+  "author": "dev.piriys@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/piriys/Valkyrie/issues"
+  },
+  "homepage": "https://github.com/piriys/Valkyrie#readme"
+}
