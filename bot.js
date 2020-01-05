@@ -1,6 +1,6 @@
-// System Variables
-const dotenv = require('dotenv');
-dotenv.config();
+// // System Variables
+// const dotenv = require('dotenv');
+// dotenv.config();
 
 // Discord.js-commando
 const { CommandoClient } = require('discord.js-commando');
@@ -8,7 +8,7 @@ const path = require('path');
 const discordClient = new CommandoClient({
   commandPrefix: '$',
   unknownCommandResponse: false,
-  owner: process.env.OWNER_DISCORD_ID,
+  owner: process.env.V_OWNER_ID,
   invite: 'https://discord.gg/DyQjte'
 });
 
@@ -34,4 +34,4 @@ discordClient.once('ready', () => {
 
 discordClient.on('error', console.error);
 
-discordClient.login(process.env.BOT_TOKEN);
+discordClient.login(process.env.V_BOT_TOKEN);

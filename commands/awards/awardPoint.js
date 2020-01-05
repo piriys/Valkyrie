@@ -1,6 +1,6 @@
-// System Variables
-const dotenv = require('dotenv');
-dotenv.config();
+// // System Variables
+// const dotenv = require('dotenv');
+// dotenv.config();
 
 // Discord.js-commando
 const { Command } = require('discord.js-commando');
@@ -25,7 +25,7 @@ module.exports = class AwardPointCommand extends Command {
   }
 
   run(message) {
-    const uri = process.env.MONGODB_URI;
+    const uri = process.env.V_MONGODB_URI;
     const mongoClient = new Mongo.MongoClient(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true
