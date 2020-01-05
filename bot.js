@@ -17,7 +17,8 @@ discordClient.registry
   .registerGroups([
     ['docs', 'Commands for Fetching External Programming Documentation'],
     ['awards', 'Commands for awards Leaderboard'],
-    ['fun', 'Commands for fun and games']
+    ['fun', 'Commands for fun and games'],
+    ['util', 'Default and utility commands']
   ])
   .registerCommandsIn(path.join(__dirname, 'commands'));
 
