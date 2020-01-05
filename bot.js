@@ -7,6 +7,7 @@ const { CommandoClient } = require('discord.js-commando');
 const path = require('path');
 const discordClient = new CommandoClient({
   commandPrefix: '$',
+  unknownCommandResponse: false,
   owner: process.env.OWNER_DISCORD_ID,
   invite: 'https://discord.gg/DyQjte'
 });
@@ -16,11 +17,8 @@ discordClient.registry
   .registerGroups([
     ['docs', 'Commands for Fetching External Programming Documentation'],
     ['awards', 'Commands for awards Leaderboard'],
-    ['fun', 'Commands for fun and games'],
-    ['util', 'Utility Commands']
+    ['fun', 'Commands for fun and games']
   ])
-  // .registerDefaultGroups()
-  // .registerDefaultCommands()
   .registerCommandsIn(path.join(__dirname, 'commands'));
 
 discordClient.once('ready', () => {
