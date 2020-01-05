@@ -12,5 +12,7 @@ module.exports = class UnknownCommand extends Command {
     });
   }
 
-  run(message) {}
+  run(message) {
+    return message.reply('Unknown command!');
+  }
 };
