@@ -1,3 +1,6 @@
+//Helpers
+const Helpers = require('./../helpers.js');
+
 // Discord.js-commando
 const { Command } = require('discord.js-commando');
 
@@ -10,6 +13,7 @@ module.exports = class AwardsLeaderboardCommand extends Command {
       name: 'cookieleaderboard',
       group: 'cookie',
       memberName: 'cookieleaderboard',
+      aliases: ['c_l'],
       description: 'View current cookie leaderboard',
       throttling: {
         usages: 5,
@@ -50,10 +54,11 @@ module.exports = class AwardsLeaderboardCommand extends Command {
           .collection('DiscordCollection');
 
         collection
-          .find({})
+          .find({ cookie: { $exists: true } })
           .sort({ cookie: -1 })
           .skip(start - 1)
           .limit(count)
+          .project({ cookie: 1, displayName: 1 })
           .toArray((findError, findResult) => {
             mongoClient.close();
             if (!findError) {
