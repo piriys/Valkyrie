@@ -1,7 +1,3 @@
-// // System Variables
-// const dotenv = require('dotenv');
-// dotenv.config();
-
 // Discord.js-commando
 const { CommandoClient } = require('discord.js-commando');
 const path = require('path');
