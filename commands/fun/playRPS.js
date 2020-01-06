@@ -98,6 +98,7 @@ module.exports = class PlayRPSCommand extends Command {
               {
                 upsert: true,
                 projection: { rps_win: 1, rps_draw: 1, rps_lose: 1 },
+                new: true,
                 returnOriginal: false
               }
             )
@@ -107,21 +108,20 @@ module.exports = class PlayRPSCommand extends Command {
               const win = updateResult.value.rps_win;
               const loss = updateResult.value.rps_lose;
               const draw = updateResult.value.rps_draw;
-
               message.say(
                 Helpers.getCodeBlock(
                   'Currently ' +
                     message.author.username +
                     ' has ' +
-                    rpsStatsUpdate.rps_win +
+                    win +
                     ' ' +
                     Helpers.pluralize(win, 'win') +
                     ', ' +
-                    rpsStatsUpdate.rps_draw +
+                    draw +
                     ' ' +
                     Helpers.pluralize(draw, 'draw') +
                     ', and ' +
-                    rpsStatsUpdate.rps_lose +
+                    loss +
                     ' ' +
                     Helpers.pluralize(loss, 'loss') +
                     '!'
