@@ -1,7 +1,3 @@
-// System Variables
-const dotenv = require('dotenv');
-dotenv.config();
-
 // Discord.js-commando
 const { Command } = require('discord.js-commando');
 
@@ -11,7 +7,7 @@ const Mongo = require('mongodb');
 module.exports = class PlayRPSCommand extends Command {
   constructor(discordClient) {
     const rpsRegex = new RegExp(
-      `<@!${process.env.BOT_DISCORD_ID}>\\s?((rock)|(paper)|(scissors))`,
+      `<@!${process.env.V_BOT_ID}>\\s?((rock)|(paper)|(scissors))`,
       'giu'
     );
     super(discordClient, {
