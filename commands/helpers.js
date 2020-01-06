@@ -22,6 +22,9 @@ module.exports = class Helpers {
     reply.push(
       '> `$cookieleaderboard`, `$c_l`: view a leaderboard of who earned the most cookies in this server!'
     );
+    reply.push(
+      '> `$rpsleaderboard`, `$rps_l`: view a leaderboard Rock Paper Scissors players!'
+    );
 
     reply.push(`**You can also:**`);
     reply.push(
