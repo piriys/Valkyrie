@@ -18,16 +18,9 @@ module.exports = class Helpers {
     const reply = [];
 
     reply.push(`\n**Start these commands with \`@Valkyrie\` or \`$\`:**`);
+    reply.push('> `$help`, `$h`: view a list of commands like this one!');
     reply.push(
-      '> `$help`' +
-        this.aliases.reduce((result, alias, index) => {
-          return result + ', `$' + alias + '`';
-        }, '') +
-        ': view a list of commands like this one!'
-    );
-    reply.push(
-      '> `$cookieleaderboard`, `$c_l`' +
-        ': view a leaderboard of who earned the most cookies in this server!'
+      '> `$cookieleaderboard`, `$c_l`: view a leaderboard of who earned the most cookies in this server!'
     );
 
     reply.push(`**You can also:**`);
