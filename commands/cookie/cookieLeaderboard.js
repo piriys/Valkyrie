@@ -7,10 +7,10 @@ const Mongo = require('mongodb');
 module.exports = class AwardsLeaderboardCommand extends Command {
   constructor(discordClient) {
     super(discordClient, {
-      name: 'awards',
-      group: 'awards',
-      memberName: 'awardsleaderboard',
-      description: 'View current awards leaderboard',
+      name: 'cookieleaderboard',
+      group: 'cookie',
+      memberName: 'cookieleaderboard',
+      description: 'View current cookie leaderboard',
       throttling: {
         usages: 5,
         duration: 60
@@ -47,11 +47,11 @@ module.exports = class AwardsLeaderboardCommand extends Command {
         console.log('mongo connected');
         const collection = mongoClient
           .db('VALKYRIE')
-          .collection('AwardLeaderboard');
+          .collection('DiscordCollection');
 
         collection
           .find({})
-          .sort({ point: -1 })
+          .sort({ cookie: -1 })
           .skip(start - 1)
           .limit(count)
           .toArray((findError, findResult) => {
@@ -62,7 +62,7 @@ module.exports = class AwardsLeaderboardCommand extends Command {
 
               if (findResult.length > 0) {
                 message.say(
-                  `__**Awards Leaderboard from ${start} to ${start +
+                  `__**Top Cookie Receivers from ${start} to ${start +
                     count -
                     1}:**__`
                 );
@@ -71,11 +71,11 @@ module.exports = class AwardsLeaderboardCommand extends Command {
                   (user, index) =>
                     `${start + index}. ${
                       user.displayName ? user.displayName : '(Unknown User)'
-                    }: ${user.point} point${user.point > 1 ? 's' : ''}${
+                    }: ${user.cookie} cookie${user.cookie > 1 ? 's' : ''}${
                       start + index === 1 ? '🏆' : ''
                     }`
                 );
-                return message.say(`\`\`\`${reply.join('\n')}\`\`\``);
+                return message.say(Helpers.getCodeBlock(reply.join('\n')));
               } else {
                 return message.reply(
                   `No result is found from the specified start (${start})!`
