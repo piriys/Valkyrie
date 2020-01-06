@@ -27,6 +27,9 @@ module.exports = class Helpers {
     reply.push(
       '> `Play rock-paper-scissors`: by typing `@Valkyrie` followed by `rock`, `paper`, or `scissors`!'
     );
+    reply.push(
+      '> `Give a cookie to other user`: by mention `@<username>` followed by `:cookie:` :cookie:!'
+    );
 
     return reply.join('\n');
   }
