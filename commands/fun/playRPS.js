@@ -1,3 +1,6 @@
+//Helpers
+const Helpers = require('./../helpers.js');
+
 // Discord.js-commando
 const { Command } = require('discord.js-commando');
 
@@ -42,21 +45,85 @@ module.exports = class PlayRPSCommand extends Command {
       };
 
       const rps = ['rock', 'paper', 'scissors'];
-      const rpsStatsUpdate = [];
+      const rpsStatsUpdate = {
+        rps_rock: 0,
+        rps_paper: 0,
+        rps_scissors: 0,
+        rps_win: 0,
+        rps_lose: 0,
+        rps_draw: 0
+      };
 
-      const reply = userChoices.map(userChoice => {
+      const reply = [];
+
+      userChoices.forEach(userChoice => {
         const botChoice = rps[Math.floor(Math.random() * rps.length)];
         const rpsResult = rpsResults[userChoice][botChoice];
-        rpsStatsUpdate.push({ choice: userChoice, result: rpsResult });
+        rpsStatsUpdate[`rps_${rpsResult}`]++;
+        rpsStatsUpdate[`rps_${userChoice}`]++;
 
-        return `${botChoice.toUpperCase()}! ${
-          rpsResult !== 'draw' ? `YOU ${rpsResult.toUpperCase()}` : 'DRAW'
-        }! ${message.author}!`;
+        reply.push(
+          `${botChoice.toUpperCase()}! ${
+            rpsResult !== 'draw' ? `YOU ${rpsResult.toUpperCase()}` : 'DRAW'
+          }! ${message.author}!`
+        );
       });
 
-      return message.say(reply.join('\n'));
+      message.say(reply.join('\n'));
+
+      const uri = process.env.V_MONGODB_URI;
+      const mongoClient = new Mongo.MongoClient(uri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      });
+
+      mongoClient.connect(connectError => {
+        if (!connectError) {
+          console.log('mongo connected');
+          const collection = mongoClient
+            .db('VALKYRIE')
+            .collection('DiscordCollection');
+          collection
+            .findOneAndUpdate(
+              {
+                _id: Helpers.getCompositeId(message, message.author.id)
+              },
+              { $inc: rpsStatsUpdate },
+              { upsert: true, returnNewDocument: true }
+            )
+            .then(result => {
+              console.log(result.value);
+              message.say(
+                Helpers.getCodeBlock(
+                  'Currently ' +
+                    result.value.displayName +
+                    ' has ' +
+                    result.value.rps_win +
+                    ' win' +
+                    Helpers.nounSuffix(result.value.rps_win) +
+                    ', ' +
+                    result.value.rps_draw +
+                    ' draw' +
+                    Helpers.nounSuffix(result.value.rps_draw) +
+                    ', and ' +
+                    result.value.rps_lose +
+                    ' loss' +
+                    Helpers.nounSuffix(result.value.rps_lose, true) +
+                    '!'
+                )
+              );
+            })
+            .catch(updateError => {
+              console.log(updateError);
+              message.say('Failed to send result to server!');
+            })
+            .finally(() => {
+              mongoClient.close();
+            });
+        }
+      });
     } else {
-      return message.reply('your hand is too fast!');
+      return message.reply('you are too fast!');
     }
   }
 };

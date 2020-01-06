@@ -11,8 +11,8 @@ const discordClient = new CommandoClient({
 discordClient.registry
   .registerDefaultTypes()
   .registerGroups([
-    ['docs', 'Commands for Fetching External Programming Documentation'],
-    ['awards', 'Commands for awards Leaderboard'],
+    ['docs', 'Commands for fetching external programming documentation'],
+    ['cookie', 'Commands for cookie leaderboard'],
     ['fun', 'Commands for fun and games'],
     ['util', 'Default and utility commands']
   ])
