@@ -54,7 +54,13 @@ module.exports = class AwardsLeaderboardCommand extends Command {
           .collection('DiscordCollection');
 
         collection
-          .find({ cookie: { $exists: true } })
+          .find({
+            cookie: { $exists: true },
+            serverId:
+              message.channel.type === 'text'
+                ? message.channel.id
+                : '(Unknown Server)'
+          })
           .sort({ cookie: -1 })
           .skip(start - 1)
           .limit(count)

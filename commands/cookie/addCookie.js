@@ -76,6 +76,10 @@ module.exports = class AddCookieCommand extends Command {
                 update: {
                   $set: {
                     displayName: clientUser.username,
+                    serverId:
+                      message.channel.type === 'text'
+                        ? message.channel.id
+                        : '(Unknown Server)',
                     userId: clientUser.id
                   },
                   $inc: { cookie: 1 }
@@ -104,7 +108,11 @@ module.exports = class AddCookieCommand extends Command {
                     $in: users.map(user =>
                       Helpers.getCompositeId(message, user.userId)
                     )
-                  }
+                  },
+                  serverId:
+                    message.channel.type === 'text'
+                      ? message.channel.id
+                      : '(Unknown Server)'
                 })
                 .project({ cookie: 1, displayName: 1, userId: 1 })
                 .toArray((findError, findResult) => {
@@ -138,45 +146,6 @@ module.exports = class AddCookieCommand extends Command {
               mongoClient.close();
               return;
             });
-          // collection.bulkWrite(
-          //   updateBulk,
-          //   { ordered: true },
-          //   (bulkWriteError, bulkWriteResult) => {
-          //     if (!bulkWriteError) {
-          //       console.log('bulk write successful:');
-          //       console.log(bulkWriteResult);
-
-          //       collection
-          //         .find({ _id: { $in: users.map(user => user._id) } })
-          //         .toArray((findError, findResult) => {
-          //           if (!findError) {
-          //             console.log('find successful:');
-          //             console.log(findResult);
-
-          //             const reply = findResult.map(user => {
-          //               const clientUser = this.client.users.get(user.userId);
-          //               return (
-          //                 (clientUser ? clientUser : '(Unknown User)') +
-          //                 ' now got ' +
-          //                 user.cookie +
-          //                 ' ' +
-          //                 Helpers.pluralize(user.cookie, 'cookie') +
-          //                 '!'
-          //               );
-          //             });
-          //             mongoClient.close();
-          //             return message.say(reply.join('\n'));
-          //           } else {
-          //             console.log('find failed:');
-          //             console.log(findError);
-          //           }
-          //         });
-          //     } else {
-          //       console.log('bulk write error:');
-          //       console.log(bulkWriteError);
-          //     }
-          //   }
-          // );
         } else {
           console.log('nothing to update');
         }

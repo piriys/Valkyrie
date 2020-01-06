@@ -91,6 +91,10 @@ module.exports = class PlayRPSCommand extends Command {
               {
                 $set: {
                   displayName: message.author.username,
+                  serverId:
+                    message.channel.type === 'text'
+                      ? message.channel.id
+                      : '(Unknown Server)',
                   userId: message.author.id
                 },
                 $inc: rpsStatsUpdate
