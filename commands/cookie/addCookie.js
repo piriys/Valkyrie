@@ -70,11 +70,13 @@ module.exports = class AddCookieCommand extends Command {
             //push only if user is valid
             updateBulk.push({
               updateOne: {
-                filter: { _id: user._id },
+                filter: {
+                  _id: Helpers.getCompositeId(message, clientUser.id)
+                },
                 update: {
                   $set: {
                     displayName: clientUser.username,
-                    userId: user.userId
+                    userId: clientUser.id
                   },
                   $inc: { cookie: 1 }
                 },
@@ -97,8 +99,14 @@ module.exports = class AddCookieCommand extends Command {
             .bulkWrite(updateBulk, { ordered: true })
             .then(bulkWriteResult => {
               collection
-                .find({ _id: { $in: users.map(user => user._id) } })
-                .project({ cookie: 1 })
+                .find({
+                  _id: {
+                    $in: users.map(user =>
+                      Helpers.getCompositeId(message, user.userId)
+                    )
+                  }
+                })
+                .project({ cookie: 1, displayName: 1, userId: 1 })
                 .toArray((findError, findResult) => {
                   if (!findError) {
                     console.log('find successful:');
