@@ -88,27 +88,42 @@ module.exports = class PlayRPSCommand extends Command {
               {
                 _id: Helpers.getCompositeId(message, message.author.id)
               },
-              { $inc: rpsStatsUpdate },
-              { upsert: true, returnNewDocument: true }
+              {
+                $set: {
+                  displayName: message.author.username,
+                  userId: message.author.id
+                },
+                $inc: rpsStatsUpdate
+              },
+              {
+                upsert: true,
+                projection: { rps_win: 1, rps_draw: 1, rps_lose: 1 },
+                returnOriginal: false
+              }
             )
-            .then(result => {
-              console.log(result.value);
+            .then(updateResult => {
+              console.log(updateResult);
+
+              const win = updateResult.value.rps_win;
+              const loss = updateResult.value.rps_lose;
+              const draw = updateResult.value.rps_draw;
+
               message.say(
                 Helpers.getCodeBlock(
                   'Currently ' +
-                    result.value.displayName +
+                    message.author.username +
                     ' has ' +
-                    result.value.rps_win +
-                    ' win' +
-                    Helpers.nounSuffix(result.value.rps_win) +
+                    rpsStatsUpdate.rps_win +
+                    ' ' +
+                    Helpers.pluralize(win, 'win') +
                     ', ' +
-                    result.value.rps_draw +
-                    ' draw' +
-                    Helpers.nounSuffix(result.value.rps_draw) +
+                    rpsStatsUpdate.rps_draw +
+                    ' ' +
+                    Helpers.pluralize(draw, 'draw') +
                     ', and ' +
-                    result.value.rps_lose +
-                    ' loss' +
-                    Helpers.nounSuffix(result.value.rps_lose, true) +
+                    rpsStatsUpdate.rps_lose +
+                    ' ' +
+                    Helpers.pluralize(loss, 'loss') +
                     '!'
                 )
               );
@@ -119,6 +134,7 @@ module.exports = class PlayRPSCommand extends Command {
             })
             .finally(() => {
               mongoClient.close();
+              return;
             });
         }
       });
