@@ -24,7 +24,7 @@ module.exports = class AddCookieCommand extends Command {
   }
 
   run(message) {
-    if (message.channel.type !== 'text') {
+    if (!message.guild) {
       console.log('pm detected');
       return message.reply('Please send cookie in the server channel!');
     }
@@ -77,10 +77,9 @@ module.exports = class AddCookieCommand extends Command {
                 update: {
                   $set: {
                     displayName: clientUser.username,
-                    serverId:
-                      message.channel.type === 'text'
-                        ? message.channel.id
-                        : '(Unknown Server)',
+                    serverId: message.guild
+                      ? message.guild.id
+                      : '(Unknown Server)',
                     userId: clientUser.id
                   },
                   $inc: { cookie: 1, point: 1 }

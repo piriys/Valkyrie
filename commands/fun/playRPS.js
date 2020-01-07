@@ -28,11 +28,12 @@ module.exports = class PlayRPSCommand extends Command {
   }
 
   run(message) {
-    if (message.channel.type !== 'text') {
+    if (!message.guild) {
       console.log('pm detected');
       return message.reply('Please play with me in the server channel!');
     }
 
+    console.log(`guildId: ${message.guild.id}`);
     console.log('playing rock paper scissors');
     const messageString = message.content;
     console.log(message.content);
@@ -99,10 +100,9 @@ module.exports = class PlayRPSCommand extends Command {
               {
                 $set: {
                   displayName: message.author.username,
-                  serverId:
-                    message.channel.type === 'text'
-                      ? message.channel.id
-                      : '(Unknown Server)',
+                  serverId: message.guild
+                    ? message.guild.id
+                    : '(Unknown Server)',
                   userId: message.author.id
                 },
                 $inc: rpsStatsUpdate

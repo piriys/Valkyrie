@@ -29,8 +29,5 @@ discordClient.once('ready', () => {
 });
 
 discordClient.on('error', console.error);
-discordClient.on('message', message => {
-  message.channel.send(message.content.toUpperCase());
-});
 
 discordClient.login(process.env.V_TOKEN);
