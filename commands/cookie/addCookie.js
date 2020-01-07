@@ -63,6 +63,8 @@ module.exports = class AddCookieCommand extends Command {
 
         const updateBulk = [];
         let hasUndefinedUser = false;
+        let hasSelf = false;
+
         users.forEach(user => {
           const clientUser = this.client.users.get(user.userId);
 
@@ -82,7 +84,7 @@ module.exports = class AddCookieCommand extends Command {
                         : '(Unknown Server)',
                     userId: clientUser.id
                   },
-                  $inc: { cookie: 1 }
+                  $inc: { cookie: 1, point: 1 }
                 },
                 upsert: true
               }
@@ -94,8 +96,12 @@ module.exports = class AddCookieCommand extends Command {
 
         if (hasUndefinedUser) {
           message.reply(
-            `I can't award points to user that's not in this server. Sorry!`
+            `I can't award points to user that's not in this server, sorry!`
           );
+        }
+
+        if (hasSelf) {
+          message.reply(`You can only earn cookies from other users, sorry!`);
         }
 
         if (updateBulk.length > 0) {

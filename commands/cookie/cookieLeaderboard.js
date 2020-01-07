@@ -15,10 +15,10 @@ module.exports = class AwardsLeaderboardCommand extends Command {
       memberName: 'cookieleaderboard',
       aliases: ['c_l'],
       description: 'View current cookie leaderboard',
-      throttling: {
-        usages: 5,
-        duration: 60
-      },
+      // throttling: {
+      //   usages: 5,
+      //   duration: 60
+      // },
       args: [
         {
           key: 'start',

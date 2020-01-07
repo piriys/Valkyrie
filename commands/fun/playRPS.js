@@ -19,21 +19,23 @@ module.exports = class PlayRPSCommand extends Command {
       memberName: 'playrps',
       description: 'Play a game of rock, paper, and scissors',
       patterns: [rpsRegex],
-      defaultHandling: false,
-      throttling: {
-        usages: 5,
-        duration: 60
-      }
+      defaultHandling: false
+      // throttling: {
+      //   usages: 5,
+      //   duration: 5
+      // }
     });
   }
 
   run(message) {
     const messageString = message.content;
+    console.log(message.content);
     let match = message.patternMatches;
     const userChoices = [match[1].toLowerCase()];
     const playLimitPerMessage = 3;
     console.log('playing rock paper scissors');
     while ((match = this.patterns[0].exec(messageString)) !== null) {
+      console.log('finding next match...');
       userChoices.push(match[1].toLowerCase());
     }
 
@@ -51,7 +53,8 @@ module.exports = class PlayRPSCommand extends Command {
         rps_scissors: 0,
         rps_win: 0,
         rps_lose: 0,
-        rps_draw: 0
+        rps_draw: 0,
+        point: 1
       };
 
       const reply = [];
@@ -134,9 +137,10 @@ module.exports = class PlayRPSCommand extends Command {
             })
             .catch(updateError => {
               console.log(updateError);
-              message.say('Failed to send result to server!');
+              message.say('failed to send result to server!');
             })
             .finally(() => {
+              console.log('closing connection');
               mongoClient.close();
               return;
             });
