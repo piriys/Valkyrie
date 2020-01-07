@@ -24,13 +24,12 @@ module.exports = class AddCookieCommand extends Command {
   }
 
   run(message) {
-    console.log('sending cookie');
-    // Server id is falsy when message is PM
-    if (message.channel.type !== 'text') {
+    if (!message.guild) {
       console.log('pm detected');
       return message.reply('Please send cookie in the server channel!');
     }
 
+    console.log('sending cookie');
     const uri = process.env.V_MONGODB_URI;
     const mongoClient = new Mongo.MongoClient(uri, {
       useNewUrlParser: true,
@@ -78,10 +77,9 @@ module.exports = class AddCookieCommand extends Command {
                 update: {
                   $set: {
                     displayName: clientUser.username,
-                    serverId:
-                      message.channel.type === 'text'
-                        ? message.channel.id
-                        : '(Unknown Server)',
+                    serverId: message.guild
+                      ? message.guild.id
+                      : '(Unknown Server)',
                     userId: clientUser.id
                   },
                   $inc: { cookie: 1, point: 1 }

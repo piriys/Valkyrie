@@ -19,23 +19,29 @@ module.exports = class PlayRPSCommand extends Command {
       memberName: 'playrps',
       description: 'Play a game of rock, paper, and scissors',
       patterns: [rpsRegex],
-      defaultHandling: false
-      // throttling: {
-      //   usages: 5,
-      //   duration: 5
-      // }
+      defaultHandling: false,
+      throttling: {
+        usages: 5,
+        duration: 5
+      }
     });
   }
 
   run(message) {
+    if (!message.guild) {
+      console.log('pm detected');
+      return message.reply('Please play with me in the server channel!');
+    }
+
+    console.log(`guildId: ${message.guild.id}`);
+    console.log('playing rock paper scissors');
     const messageString = message.content;
     console.log(message.content);
     let match = message.patternMatches;
     const userChoices = [match[1].toLowerCase()];
     const playLimitPerMessage = 3;
-    console.log('playing rock paper scissors');
+
     while ((match = this.patterns[0].exec(messageString)) !== null) {
-      console.log('finding next match...');
       userChoices.push(match[1].toLowerCase());
     }
 
@@ -94,10 +100,9 @@ module.exports = class PlayRPSCommand extends Command {
               {
                 $set: {
                   displayName: message.author.username,
-                  serverId:
-                    message.channel.type === 'text'
-                      ? message.channel.id
-                      : '(Unknown Server)',
+                  serverId: message.guild
+                    ? message.guild.id
+                    : '(Unknown Server)',
                   userId: message.author.id
                 },
                 $inc: rpsStatsUpdate
