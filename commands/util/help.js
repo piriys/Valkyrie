@@ -11,11 +11,11 @@ module.exports = class AddCookieCommand extends Command {
       aliases: ['h'],
       group: 'util',
       memberName: 'help',
-      description: 'Shows a list of commands',
-      throttling: {
-        usages: 5,
-        duration: 60
-      }
+      description: 'Shows a list of commands'
+      // throttling: {
+      //   usages: 5,
+      //   duration: 60
+      // }
     });
   }
 
