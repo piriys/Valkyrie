@@ -39,6 +39,11 @@ module.exports = class AwardsLeaderboardCommand extends Command {
   }
 
   run(message, { start, count }) {
+    if (!message.guild) {
+      console.log('pm detected');
+      return message.reply('Please check leaderboard in server channel!');
+    }
+
     const uri = process.env.V_MONGODB_URI;
     const mongoClient = new Mongo.MongoClient(uri, {
       useNewUrlParser: true,
@@ -58,10 +63,7 @@ module.exports = class AwardsLeaderboardCommand extends Command {
             rps_win: { $exists: true },
             rps_draw: { $exists: true },
             rps_lose: { $exists: true },
-            serverId:
-              message.channel.type === 'text'
-                ? message.channel.id
-                : '(Unknown Server)'
+            serverId: message.guild ? message.guild.id : '(Unknown Server)'
           })
           .sort({ rps_win: -1 })
           .skip(start - 1)
