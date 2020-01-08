@@ -18,7 +18,7 @@ module.exports = class AddCookieCommand extends Command {
       defaultHandling: false,
       throttling: {
         usages: 5,
-        duration: 60
+        duration: 10
       }
     });
   }
