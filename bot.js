@@ -29,5 +29,8 @@ discordClient.once('ready', () => {
 });
 
 discordClient.on('error', console.error);
+discordClient.on('message', message => {
+  console.log(message.content);
+});
 
 discordClient.login(process.env.V_TOKEN);

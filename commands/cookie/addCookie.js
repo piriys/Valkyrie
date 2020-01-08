@@ -29,7 +29,6 @@ module.exports = class AddCookieCommand extends Command {
       return message.reply('Please send cookie in the server channel!');
     }
 
-    console.log('sending cookie');
     const uri = process.env.V_MONGODB_URI;
     const mongoClient = new Mongo.MongoClient(uri, {
       useNewUrlParser: true,
@@ -53,7 +52,6 @@ module.exports = class AddCookieCommand extends Command {
         });
       });
 
-      console.log(users);
       if (!connectError) {
         console.log('mongo connected');
         const collection = mongoClient
@@ -64,29 +62,34 @@ module.exports = class AddCookieCommand extends Command {
         let hasUndefinedUser = false;
         let hasSelf = false;
 
+        console.log(users);
         users.forEach(user => {
           const clientUser = this.client.users.get(user.userId);
 
           if (clientUser) {
             //push only if user is valid
-            updateBulk.push({
-              updateOne: {
-                filter: {
-                  _id: Helpers.getCompositeId(message, clientUser.id)
-                },
-                update: {
-                  $set: {
-                    displayName: clientUser.username,
-                    serverId: message.guild
-                      ? message.guild.id
-                      : '(Unknown Server)',
-                    userId: clientUser.id
+            if (clientUser.id === message.author.id) {
+              hasSelf = true;
+            } else {
+              updateBulk.push({
+                updateOne: {
+                  filter: {
+                    _id: Helpers.getCompositeId(message, clientUser.id)
                   },
-                  $inc: { cookie: 1, point: 1 }
-                },
-                upsert: true
-              }
-            });
+                  update: {
+                    $set: {
+                      displayName: clientUser.username,
+                      serverId: message.guild
+                        ? message.guild.id
+                        : '(Unknown Server)',
+                      userId: clientUser.id
+                    },
+                    $inc: { cookie: 1, point: 1 }
+                  },
+                  upsert: true
+                }
+              });
+            }
           } else {
             hasUndefinedUser = true;
           }
@@ -106,6 +109,7 @@ module.exports = class AddCookieCommand extends Command {
           collection
             .bulkWrite(updateBulk, { ordered: true })
             .then(bulkWriteResult => {
+              console.log(bulkWriteResult);
               collection
                 .find({
                   _id: {
@@ -113,10 +117,9 @@ module.exports = class AddCookieCommand extends Command {
                       Helpers.getCompositeId(message, user.userId)
                     )
                   },
-                  serverId:
-                    message.channel.type === 'text'
-                      ? message.channel.id
-                      : '(Unknown Server)'
+                  serverId: message.guild
+                    ? message.guild.id
+                    : '(Unknown Server)'
                 })
                 .project({ cookie: 1, displayName: 1, userId: 1 })
                 .toArray((findError, findResult) => {
@@ -143,7 +146,6 @@ module.exports = class AddCookieCommand extends Command {
                 });
             })
             .catch(bulkWriteError => {
-              console.log(bulkWriteError);
               message.say('Failed to send result to server!');
             })
             .finally(() => {
