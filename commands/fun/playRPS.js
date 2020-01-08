@@ -10,7 +10,7 @@ const Mongo = require('mongodb');
 module.exports = class PlayRPSCommand extends Command {
   constructor(discordClient) {
     const rpsRegex = new RegExp(
-      `<@!${process.env.V_BOT_ID}>\\s?((rock)|(paper)|(scissors))`,
+      `<@!?${process.env.V_BOT_ID}>\\s?((rock)|(paper)|(scissors))`,
       'giu'
     );
     super(discordClient, {
