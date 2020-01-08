@@ -15,10 +15,10 @@ module.exports = class AwardsLeaderboardCommand extends Command {
       memberName: 'rpsleaderboard',
       aliases: ['rps_l'],
       description: 'View current Rock, Paper, Scissors leaderboard',
-      //   throttling: {
-      //     usages: 5,
-      //     duration: 60
-      //   },
+      throttling: {
+        usages: 5,
+        duration: 60
+      },
       args: [
         {
           key: 'start',
