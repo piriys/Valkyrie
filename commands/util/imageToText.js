@@ -66,7 +66,7 @@ module.exports = class ImageToTextCommand extends Command {
       }
 
       message.reply(
-        'Thanks for waiting! Here is what I think the image says: :thinking:'
+        'thanks for waiting! :thinking: Here is what I think the image says:'
       );
       const imageText = [];
 
