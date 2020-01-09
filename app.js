@@ -32,7 +32,7 @@ discordClient.once('ready', () => {
 
   // Setting up express
   const expressApp = Express();
-  const port = 80;
+  const port = process.env.PORT || 80;
 
   expressApp.set('view engine', 'pug');
   expressApp.set('views', './views');
