@@ -7,14 +7,14 @@ const Helpers = require('./../helpers.js');
 // Discord.js-commando
 const { Command } = require('discord.js-commando');
 
-module.exports = class ImageToTextCommand extends Command {
+module.exports = class IdentifyImageCommand extends Command {
   constructor(discordClient) {
     super(discordClient, {
-      name: 'describeimage',
-      aliases: ['img_d', 'describe this:', 'analyze this:'],
+      name: 'identifyimage',
+      aliases: ['img_id', 'identify this:', 'analyze this:'],
       group: 'util',
-      memberName: 'describeimage',
-      description: 'Describe image',
+      memberName: 'identifyimage',
+      description: 'Identify image',
       throttling: {
         usages: 1,
         duration: 10
@@ -67,7 +67,7 @@ module.exports = class ImageToTextCommand extends Command {
       }
 
       message.reply(
-        'Thanks for waiting! Here is what I see in the image: :thinking:'
+        'thanks for waiting! :thinking: Here is what I see in the image: '
       );
 
       const objectTexts = imageObjects.map(imageObject =>

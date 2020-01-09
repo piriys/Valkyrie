@@ -25,6 +25,12 @@ module.exports = class Helpers {
     reply.push(
       '> `$rpsleaderboard`, `$rps_l`: view a leaderboard Rock Paper Scissors players!'
     );
+    reply.push(
+      '> `$imagetotext <url>`, `$img_t <url>`: transcribe an image from an image url!'
+    );
+    reply.push(
+      '> `$identifyimage <url>`, `$img_id <url>`: identify objects in an image from an image url!'
+    );
 
     reply.push(`**You can also:**`);
     reply.push(
