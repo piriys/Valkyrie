@@ -31,6 +31,9 @@ module.exports = class Helpers {
     reply.push(
       '> `$identifyimage <url>`, `$img_id <url>`: identify objects in an image from an image url!'
     );
+    reply.push(
+      '> `$weather <location>`, `$wt <location>`: find out the current weather in a given location!'
+    );
 
     reply.push(`**You can also:**`);
     reply.push(

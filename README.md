@@ -11,6 +11,7 @@ Discord bot with gaming, awards, and AI image content recognition.
 | `$rpsleaderboard`, `rps_l`              | view a leaderboard of Rock Paper Scissors players                |
 | `$imagetotext <url>`, `$img_t <url>`    | transcribe an image from an image url                            |
 | `$identifyimage <url>`, `$img_id <url>` | identify objects in an image from an image url                   |
+| `$weather <location>`, `$wt <location>` | find out the current weather in a given location                 |
 
 ## You can also:
 
