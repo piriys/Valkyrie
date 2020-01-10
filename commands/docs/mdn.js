@@ -54,7 +54,6 @@ module.exports = class AddCookieCommand extends Command {
         );
       }
 
-      console.log(jsonResponse);
       const mdnDocument = jsonResponse.documents[0];
 
       const docsUrl = `https://developer.mozilla.org/en-US/docs/${mdnDocument.slug}`;

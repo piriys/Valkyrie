@@ -12,6 +12,7 @@ Discord bot with gaming, awards, and AI image content recognition.
 | `$imagetotext <url>`, `$img_t <url>`    | transcribe an image from an image url                            |
 | `$identifyimage <url>`, `$img_id <url>` | identify objects in an image from an image url                   |
 | `$weather <location>`, `$wt <location>` | find out the current weather in a given location                 |
+| `$mdn <search term>`                    | look up documentation from MDN Web Docs                          |
 
 ## You can also:
 
