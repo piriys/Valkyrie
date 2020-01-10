@@ -2,7 +2,7 @@
   "name": "valkyrie",
   "version": "1.0.0",
   "description": "A discord bot",
-  "main": "app.js",
+  "main": "worker.js",
   "engines": {
     "node": "12.13.0"
   },
@@ -18,7 +18,9 @@
   },
   "devDependencies": {},
   "scripts": {
-    "start": "bot.js"
+    "start": "worker.js",
+    "worker": "worker.js",
+    "web": "web.js"
   },
   "repository": {
     "type": "git",
