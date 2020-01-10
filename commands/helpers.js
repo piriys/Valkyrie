@@ -34,6 +34,9 @@ module.exports = class Helpers {
     reply.push(
       '> `$weather <location>`, `$wt <location>`: find out the current weather in a given location!'
     );
+    reply.push(
+      '> `$mdn <search term>`, look up documentation from MDN Web Docs!'
+    );
 
     reply.push(`**You can also:**`);
     reply.push(
