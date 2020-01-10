@@ -1,6 +1,6 @@
 # Valkyrie
 
-Discord bot with gaming, awards, and AI image content recognition.
+Discord bot with gaming, awards, AI image content recognition, and more!
 
 ## Start these commands with `@Valkyrie` or `$`:
 
