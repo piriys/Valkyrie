@@ -2,7 +2,7 @@
   "name": "valkyrie",
   "version": "1.0.0",
   "description": "A discord bot",
-  "main": "bot.js",
+  "main": "app.js",
   "engines": {
     "node": "12.13.0"
   },
